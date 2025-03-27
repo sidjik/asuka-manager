@@ -135,12 +135,6 @@ docker cp README.md asuka:/app/chainlit.md
 
 
 
-# sleep 1 second for wait while app run and open browser
-sleep 1
-xdg-open "localhost:8080"
-
-#fg %1
-
 
 
 # setup admin panel via tmux 
