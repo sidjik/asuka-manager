@@ -1,0 +1,3 @@
+# link to database with postgres protocol via auskaNet with postgresAsuka name host
+DATABASE_URL=postgresql://postgres:password@postgresAsuka:5432/postgres
+CHAINLIT_AUTH_SECRET="Rt?Kk%lDU-WAQ/^R=H-U0v,jipoaj*aV3RG,ni:g3?cIvd5s:mO$d~IJdl>.ubl?"
