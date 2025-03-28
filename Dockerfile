@@ -21,7 +21,6 @@ RUN pip install -r requirements.txt --root-user-action ignore
 # copy project file
 COPY ./app.py .
 COPY ./OllamaModel.py .
-COPY ./start-chainlit.bash .
 COPY ./env-chainlit ./.env
 
 # start app

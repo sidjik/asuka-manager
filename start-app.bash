@@ -164,7 +164,9 @@ tmux send-key -t asuka_admin:2 "echo 'You can download models with command ollam
 # first window with btop
 tmux send-keys -t asuka_admin:0 "btop" C-m
 
-
+# sleep 1 second for wait while app run and open browser
+sleep 1
+xdg-open "localhost:8080"
 
 
 # open tmux for user

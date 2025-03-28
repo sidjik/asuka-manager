@@ -10,6 +10,8 @@ The main application uses the design from [Chainlit](https://github.com/Chainlit
 
 You can always check README on the web app, just open Readme buttom on the right top corner.
 
+You should have can execute docker command without sudo, or go to root and execute `start-app.bash`. And preinstalled ollama is required, [install ollama](https://ollama.com/download).
+
 
 
 ## Images
