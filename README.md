@@ -36,7 +36,7 @@ You should have can execute docker command without sudo, or go to root and execu
     - amd gpu example with dnf `./start-app.bash dnf radeon`
 
 2. For remove all containers, volumes, images(*ollama on it too*), execute `end-app.bash`.
-3. You can add alias `alias asuka-dump="docker container stop ollama asuka postgresAsuka; docker container rm ollama asuka postgresAsuka; tmux kill-session -t asuka_admin"` for quick dump all containers and tmux session. After that you can use `start-app.bash` with healthy execution. You can remove this alias with command `unalias asuka-dump`.
+3. You can add alias `alias asuka-dump="docker container stop ollama asuka postgresAsuka; docker container rm ollama asuka postgresAsuka; tmux kill-session -t asuka_admin"` for quick dump all containers and tmux session. After that you can use `start-app.bash` with healthy execution. You can remove this alias with command `unalias asuka-dump`. Also, you can use `./asuka-dump.bash`.
 
 
 ## Tmux overview

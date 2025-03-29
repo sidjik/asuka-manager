@@ -1,4 +1,4 @@
-if [ "$(whoami)" = "root" ]; then
+if [ "$(whoami)" != "root" ]; then
   SUDO="sudo"
 else
   SUDO=""
@@ -128,13 +128,14 @@ docker exec -it postgresAsuka bash -c 'prisma migrate deploy'
 
 # build main asuka app image
 docker build --rm --no-cache -t asuka:latest .
-
+echo -n 'INFO: Run asuka app image... '
 # run asuka app image
 docker run -d -v asuka_app:/app/mask -p 8080:80 \
     --restart unless-stopped \
     --network asukaNet \
     --name asuka asuka:latest \
 
+echo -n 'INFO: copy to readme'
 docker cp README.md asuka:/app/chainlit.md
 
 
@@ -167,11 +168,6 @@ tmux send-key -t asuka_admin:2 "echo 'You can download models with command ollam
 
 # first window with btop
 tmux send-keys -t asuka_admin:0 "btop" C-m
-
-alias asuka-dump="docker container stop ollama asuka postgresAsuka; docker container rm ollama asuka postgresAsuka; tmux kill-session -t asuka_admin"
-# sleep 1 second for wait while app run and open browser
-sleep 1
-xdg-open "localhost:8080"
 
 
 # open tmux for user
