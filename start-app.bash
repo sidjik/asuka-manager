@@ -1,4 +1,8 @@
-
+if [ "$(whoami)" = "root" ]; then
+  SUDO="sudo"
+else
+  SUDO=""
+fi
 
 
 
@@ -49,26 +53,26 @@ fi
 if [ "$2" = "nvidia" ]; then
     if [ "$1" = "apt" ]; then
         curl -fsSL https://nvidia.github.io/libnvidia-container/gpgkey \
-            | sudo gpg --dearmor -o /usr/share/keyrings/nvidia-container-toolkit-keyring.gpg
+            | $SUDO gpg --dearmor -o /usr/share/keyrings/nvidia-container-toolkit-keyring.gpg
         curl -s -L https://nvidia.github.io/libnvidia-container/stable/deb/nvidia-container-toolkit.list \
             | sed 's#deb https://#deb [signed-by=/usr/share/keyrings/nvidia-container-toolkit-keyring.gpg] https://#g' \
-            | sudo tee /etc/apt/sources.list.d/nvidia-container-toolkit.list
-        sudo apt-get update
+            | $SUDO tee /etc/apt/sources.list.d/nvidia-container-toolkit.list
+        $SUDO apt-get update
         
-        sudo apt-get install -y nvidia-container-toolkit
+        $SUDO apt-get install -y nvidia-container-toolkit
 
     elif [ "$1" = "yum" || "$1" = "dnf"]; then
         curl -s -L https://nvidia.github.io/libnvidia-container/stable/rpm/nvidia-container-toolkit.repo \
-            |sudo tee /etc/yum.repos.d/nvidia-container-toolkit.repo
+            |$SUDO tee /etc/yum.repos.d/nvidia-container-toolkit.repo
         if [ "$1" = "yum" ]; then
-            sudo yum install -y nvidia-container-toolkit
+            $SUDO yum install -y nvidia-container-toolkit
         else [ "$1" = "dnf" ]: then
-            sudo dnf install -y nvidia-container-toolkit
+            $SUDO dnf install -y nvidia-container-toolkit
 
         fi
     fi 
-    sudo nvidia-ctk runtime configure --runtime=docker
-    sudo systemctl restart docker
+    $SUDO nvidia-ctk runtime configure --runtime=docker
+    $SUDO systemctl restart docker
 
     echo -n 'INFO: Runnin ollama container with ID...  '
     docker run -d --gpus=all -v ollama:/root/.ollama -p 11434:11434 \
@@ -140,7 +144,7 @@ docker cp README.md asuka:/app/chainlit.md
 # setup admin panel via tmux 
 # install needeable package
 
-sudo "$1" install btop tmux nvtop
+$SUDO "$1" install btop tmux nvtop
 
 
 # setup tmux
@@ -164,6 +168,7 @@ tmux send-key -t asuka_admin:2 "echo 'You can download models with command ollam
 # first window with btop
 tmux send-keys -t asuka_admin:0 "btop" C-m
 
+alias asuka-dump="docker container stop ollama asuka postgresAsuka; docker container rm ollama asuka postgresAsuka; tmux kill-session -t asuka_admin"
 # sleep 1 second for wait while app run and open browser
 sleep 1
 xdg-open "localhost:8080"
