@@ -1,4 +1,4 @@
-FROM python:latest AS python
+FROM python:3.12.12-alpine AS python
 
 WORKDIR /app
 
@@ -23,7 +23,7 @@ COPY ./app.py .
 COPY ./OllamaModel.py .
 #COPY ./env-chainlit ./.env
 
-RUN echo "DATABASE_URL=postgresql://postgres:password@postgresAsuka:5432/postgres\n" > ./.env
+RUN echo "DATABASE_URL=postgresql://postgres:password@postgresAsuka:5432/postgres" > ./.env
 RUN python -m chainlit create-secret | grep 'CHAINLIT_AUTH_SECRET' >> ./.env
 
 
