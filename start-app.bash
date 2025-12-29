@@ -6,12 +6,13 @@ fi
 
 
 
-# download needeable image
-docker pull ollama/ollama:latest
+# download needeable image docker pull ollama/ollama:latest
 
 
+# --- CREATE NECESSARY VOLUME ---
+#
 # create volume for ollama if not already exists
-echo -n 'INFO: Create volume with ID(name:asuka)...  '
+echo -n 'INFO: Create volume with ID(name:ollama)...  '
 if docker volume ls -q | grep ollama > /dev/null 2>&1; then 
     echo 'volume already exist'
 else 
@@ -19,7 +20,7 @@ else
 fi
 
 # create volume for postgres if not already exists
-echo -n 'INFO: Create volume with ID(name:asuka)...  '
+echo -n 'INFO: Create volume with ID(name:asuka_datalayer)...  '
 if docker volume ls -q | grep asuka_datalayer > /dev/null 2>&1; then 
     echo 'volume already exist'
 else 
@@ -27,7 +28,7 @@ else
 fi
 
 # create volume for asuka app if not already exists
-echo -n 'INFO: Create volume with ID(name:asuka)...  '
+echo -n 'INFO: Create volume with ID(name:asuka_app)...  '
 if docker volume ls -q | grep asuka_app > /dev/null 2>&1; then 
     echo 'volume already exist'
 else 
@@ -35,7 +36,19 @@ else
 fi
 
 
+# create volume for s3 storage if not already exists
+echo -n 'INFO: Create volume with ID(name:s3_asuka)...  '
+if docker volume ls -q | grep s3_asuka > /dev/null 2>&1; then 
+    echo 'volume already exist'
+else 
+    docker volume create s3_asuka
+fi
+#
+# -------------------------------
 
+
+# --- CREATE NETWORK ---
+#
 # create network for ollama and asuka communication
 echo -n 'INFO: Create network with ID(name:asukaNet)...  '
 if docker network ls | grep asukaNet > /dev/null 2>&1; then 
@@ -43,6 +56,8 @@ if docker network ls | grep asukaNet > /dev/null 2>&1; then
 else 
     docker network create asukaNet
 fi
+#
+# ----------------------
 
 
 #. env/bin/activate
@@ -108,6 +123,7 @@ docker exec -it ollama bash -c 'ollama pull qwen2:0.5b'
 docker run -d --restart unless-stopped \
     -v $(pwd)/datalayer/localstack-script.sh:/etc/localstack/init/ready.d/script.sh \
     -v $(pwd)/var/run/docker.sock:/var/run/docker.sock \
+    -v s3_asuka:/var/lib/localstack \
     -p 4566:4566 -e SERVICES="s3" \
     --network asukaNet --name localstack \
     localstack/localstack:latest

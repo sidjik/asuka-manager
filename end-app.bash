@@ -1,6 +1,6 @@
 #stop containers
-docker container stop ollama asuka postgresAsuka
-docker container rm ollama asuka postgresAsuka
+docker container stop ollama asuka postgresAsuka localstack
+docker container rm ollama asuka postgresAsuka localstack
 
 # delete network
 docker network rm asukaNet
