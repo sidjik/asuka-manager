@@ -104,6 +104,14 @@ docker exec -it ollama bash -c 'ollama pull llama3.2:1b'
 docker exec -it ollama bash -c 'ollama pull qwen2.5:0.5b'
 docker exec -it ollama bash -c 'ollama pull qwen2:0.5b'
 
+# --- setup s3 storage for image/documents ---
+docker run -d --restart unless-stopped \
+    -v $(pwd)/datalayer/localstack-script.sh:/etc/localstack/init/ready.d/script.sh \
+    -v $(pwd)/var/run/docker.sock:/var/run/docker.sock \
+    -p 4566:4566 -e SERVICES="s3" \
+    --network asukaNet --name localstack \
+    localstack/localstack:latest
+# --------------------------------------------
 
 
 # setup postgres for asuka app dataalyer
@@ -132,11 +140,15 @@ echo -n 'INFO: Run asuka app image... '
 # run asuka app image
 docker run -d -v asuka_app:/app/mask -p 8080:80 \
     --restart unless-stopped \
+    --dns $(docker inspect -f '{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' localstack) \
     --network asukaNet \
     --name asuka asuka:latest \
 
 echo -n 'INFO: copy to readme'
 docker cp README.md asuka:/app/chainlit.md
+
+
+
 
 
 
